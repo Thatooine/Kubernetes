@@ -1,0 +1,73 @@
+# Please edit the object below. Lines beginning with a '#' will be ignored,
+# and an empty file will abort the edit. If an error occurs while saving this file will be
+# reopened with the relevant failures.
+#
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "1"
+  creationTimestamp: "2019-08-20T09:28:35Z"
+  generation: 1
+  labels:
+    app: alpaca
+    env: prod
+    ver: "1"
+  name: alpac-prod
+  namespace: default
+  resourceVersion: "123817"
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/alpac-prod
+  uid: 6ca67176-2395-4b94-9fa0-1d0da1edcf29
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 3
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app: alpaca
+      env: prod
+      ver: "1"
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: alpaca
+        env: prod
+        ver: "1"
+    spec:
+      containers:
+      - image: thatooine/kuard-app:latest
+        imagePullPolicy: Always
+        name: alpac-prod
+        readinessProbe:
+          httpGet:
+          path: /ready
+          port: 8080
+        periodSeconds:  2
+        initialDelaySeconds:  0
+        failureThreshold: 3
+        successThreshold: 1
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        resources: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      terminationGracePeriodSeconds: 30
+status:
+  availableReplicas: 3
+  conditions:
+  - lastTransitionTime: "2019-08-20T09:28:45Z"
+    lastUpdateTime: "2019-08-20T09:28:45Z"
+    message: Deployment has minimum availability.
+    reason: MinimumReplicasAvailable
+    status: "True"
