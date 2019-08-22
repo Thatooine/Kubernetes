@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  labels:
+    app: work-queue
+    component: work-queue
+    chapter: jobs
+  name: work-queue
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: work-queue
+        component: work-queue
+        chapter: jobs
+    spec:
+      containers:
+       -  name: work-queue
+          image: "thatooine/kuard-app:latest"
+          imagePullPolicy: Always
